@@ -21,12 +21,10 @@ public class Main {
                 switch (option) {
                     case 1:
                         addTask();
+                        break;
+                    case 2:
                         retrieveTasks(manager.getTaskDTO());
                         break;
-                    case 2: {
-                        retrieveTasks(manager.getTaskDTO());
-                        break;
-                    }
                     case 3:
                         removeTask();
                         retrieveTasks(manager.getTaskDTO());

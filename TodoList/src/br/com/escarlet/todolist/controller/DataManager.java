@@ -6,6 +6,7 @@ import br.com.escarlet.todolist.model.enums.TaskStatus;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,10 +17,13 @@ public class DataManager {
     public void addTask(String name, String description, int priority, LocalDateTime dueDate, String statusInput) {
         try {
             TaskStatus status = TaskStatus.valueOf(statusInput.toUpperCase().trim());
-            Task task = new Task(name, description, priority, dueDate, status);
-            this.taskList.add(task);
+            this.taskList.add(new Task(name, description, priority, dueDate, status));
+
+            Collections.sort(taskList);
         } catch (IllegalArgumentException e) {
             this.taskList.add(new Task(name, description, priority, dueDate, TaskStatus.TODO));
+
+            Collections.sort(taskList);
         }
 
         System.out.println("Tarefa " + name + " criada com sucesso!");

@@ -4,7 +4,7 @@ import br.com.escarlet.todolist.model.enums.TaskStatus;
 
 import java.time.LocalDateTime;
 
-public class Task {
+public class Task implements Comparable<Task>{
     private static int counter = 1;
     private final int id;
     private final String name;
@@ -20,6 +20,11 @@ public class Task {
         this.priority = priority;
         this.dueDate = dueDate;
         this.status = status;
+    }
+
+    @Override
+    public int compareTo (Task other) {
+        return Integer.compare(this.priority, other.getPriority());
     }
 
     public int getId() { return id; }
