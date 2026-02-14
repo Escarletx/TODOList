@@ -5,8 +5,11 @@ import br.com.escarlet.todolist.model.entities.Task;
 import br.com.escarlet.todolist.model.enums.TaskStatus;
 
 import java.util.List;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Collections;
+import java.io.BufferedWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -92,5 +95,34 @@ public class DataManager {
                         t.getStatus().name(),
                         t.getCategory()
                 );
+    }
+
+    public void exportTasksToTxt(String filename) {
+        if (!filename.toLowerCase().endsWith(".txt")) {
+            filename += ".txt";
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (Task t : taskList) {
+                writer.write("ID: " + t.getId());
+                writer.newLine();
+                writer.write("Tarefa: " + t.getName());
+                writer.newLine();
+                writer.write("Categoria: " + t.getCategory());
+                writer.newLine();
+                writer.write("Prioridade: " + t.getPriority());
+                writer.newLine();
+                writer.write("Status: " + t.getStatus());
+                writer.newLine();
+                writer.write("Data de termino: " + t.getDueDate().format(fmt));
+                writer.newLine();
+                writer.write("Descrição: " + t.getDescription());
+                writer.newLine();
+                writer.write("-------------------------------------------");
+                writer.newLine();
+            }
+        } catch(IOException e) {
+            System.err.println("Erro ao salvar o arquivo: " + e.getMessage());
+        }
     }
 }

@@ -43,6 +43,9 @@ public class Main {
                         filterByCategory();
                         break;
                     case 8:
+                        saveTasks();
+                        break;
+                    case 9:
                         System.out.println("Encerrando programa");
                         return;
                     default:
@@ -63,7 +66,8 @@ public class Main {
         System.out.println("5. Filtar por status");
         System.out.println("6. Filtar por prioridade");
         System.out.println("7. Filtar por categoria");
-        System.out.println("8. Sair");
+        System.out.println("8. Salvar tarefas em txt");
+        System.out.println("9. Sair");
         System.out.println("Escolha uma opção: ");
     }
 
@@ -175,5 +179,22 @@ public class Main {
 
         List<TaskDTO> result = manager.filterByCategory(category);
         retrieveTasks(result);
+    }
+
+    public static void saveTasks() {
+        if (manager.getTaskDTO().isEmpty()) {
+            System.out.println("Não há itens na lista para salvar.");
+            return;
+        }
+
+        System.out.println("\n=== Exportar Tarefas ===");
+        System.out.print("Digite o nome do arquivo (ex: tarefas_fevereiro): ");
+        String fileName = input.nextLine().trim();
+
+        if (fileName.isEmpty()) {
+            System.out.println("Nome inválido. O arquivo não foi salvo.");
+            return;
+        }
+        manager.exportTasksToTxt(fileName);
     }
 }
