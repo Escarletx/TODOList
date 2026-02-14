@@ -40,6 +40,9 @@ public class Main {
                         filterByPriority();
                         break;
                     case 7:
+                        filterByCategory();
+                        break;
+                    case 8:
                         System.out.println("Encerrando programa");
                         return;
                     default:
@@ -53,13 +56,14 @@ public class Main {
 
     public static void mainMenu() {
         System.out.println(" === TODO LIST ===");
-        System.out.println("1. Adicionar Tarefa");
-        System.out.println("2. Listar Tarefas");
+        System.out.println("1. Adicionar tarefa");
+        System.out.println("2. Listar tarefas");
         System.out.println("3. Remover tarefas da lista");
         System.out.println("4. Cadastrar categoria de tarefa");
         System.out.println("5. Filtar por status");
         System.out.println("6. Filtar por prioridade");
-        System.out.println("7. Sair");
+        System.out.println("7. Filtar por categoria");
+        System.out.println("8. Sair");
         System.out.println("Escolha uma opção: ");
     }
 
@@ -161,5 +165,15 @@ public class Main {
         String inputCategory = input.nextLine().trim();
         manager.addCategory(inputCategory);
         return inputCategory;
+    }
+
+    private static void filterByCategory() {
+        System.out.println("=== Filtar por categoria ===");
+        System.out.println("\nCategorias disponíveis: " + manager.getCategories());
+        System.out.print("Digite o nome da categoria para busca: ");
+        String category = input.nextLine().trim();
+
+        List<TaskDTO> result = manager.filterByCategory(category);
+        retrieveTasks(result);
     }
 }

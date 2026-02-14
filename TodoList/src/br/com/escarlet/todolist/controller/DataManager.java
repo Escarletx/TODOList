@@ -75,6 +75,13 @@ public class DataManager {
                 .toList();
     }
 
+    public List<TaskDTO> filterByCategory(String categoryInput) {
+        return taskList.stream()
+                .filter(t -> t.getCategory().equalsIgnoreCase(categoryInput.trim()))
+                .map(this::mapToDTO)
+                .toList();
+    }
+
     public TaskDTO mapToDTO(Task t) {
         return new TaskDTO(
                         t.getId(),
