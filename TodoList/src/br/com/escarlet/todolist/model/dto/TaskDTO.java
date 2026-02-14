@@ -1,5 +1,9 @@
 package br.com.escarlet.todolist.model.dto;
 
+import br.com.escarlet.todolist.model.entities.Task;
+
+import java.time.format.DateTimeFormatter;
+
 public record TaskDTO(
         int id,
         String name,
@@ -7,7 +11,18 @@ public record TaskDTO(
         int priority,
         String dueDate,
         String status,
-        String category) {
+        String category)
+{
+    public static TaskDTO fromEntity (Task t, DateTimeFormatter fmt) {
+        return new TaskDTO(
+                t.getId(),
+                t.getName(),
+                t.getDescription(),
+                t.getPriority(),
+                t.getDueDate().format(fmt),
+                t.getStatus().name(),
+                t.getCategory());
+    }
 
     @Override
     public String toString() {

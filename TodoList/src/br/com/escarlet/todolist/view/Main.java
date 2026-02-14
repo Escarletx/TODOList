@@ -1,10 +1,12 @@
 package br.com.escarlet.todolist.view;
 
 import br.com.escarlet.todolist.model.dto.TaskDTO;
+import br.com.escarlet.todolist.service.FileService;
 import br.com.escarlet.todolist.controller.DataManager;
 
 import java.util.List;
 import java.util.Scanner;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -23,11 +25,11 @@ public class Main {
                         addTask();
                         break;
                     case 2:
-                        retrieveTasks(manager.getTaskDTO());
+                        retrieveTasks(manager.getAllTasksDTO());
                         break;
                     case 3:
                         removeTask();
-                        retrieveTasks(manager.getTaskDTO());
+                        retrieveTasks(manager.getAllTasksDTO());
                         break;
                     case 4:
                         System.out.print("=== Cadastre uma categoria ===");
@@ -45,9 +47,10 @@ public class Main {
                     case 8:
                         saveTasks();
                         break;
-                    case 9:
+                    case 9: {
                         System.out.println("Encerrando programa");
                         return;
+                    }
                     default:
                         System.out.println("Opção inválida!");
                 }
@@ -84,7 +87,7 @@ public class Main {
     }
 
     public static void removeTask() {
-        if (manager.getTaskDTO().isEmpty()) {
+        if (manager.getAllTasksDTO().isEmpty()) {
             System.out.println("Não há itens na lista para remover.");
             return;
         }
@@ -92,9 +95,7 @@ public class Main {
         System.out.println("Digite o ID da tarefa que deseja remover: ");
         try {
             int id = Integer.parseInt(input.nextLine());
-            boolean removed = manager.removeTaskById(id);
-
-            if(removed) {
+            if(manager.removeTaskById(id)) {
                 System.out.println("Tarefa " + id + " removida!");
             } else  {
                 System.out.println("Tarefa " + id + "não encontrada.");
@@ -102,6 +103,55 @@ public class Main {
         } catch (NumberFormatException e) {
             System.out.println("ID inválido.");
         }
+    }
+
+    public static void saveTasks() {
+        List<TaskDTO> tasks = manager.getAllTasksDTO();
+        if (tasks.isEmpty()) {
+            System.out.println("Não há itens na lista para salvar.");
+            return;
+        }
+
+        System.out.println("\n=== Exportar Tarefas ===");
+        System.out.print("Digite o nome do arquivo: ");
+        String fileName = input.nextLine().trim();
+
+        if (fileName.isEmpty()) {
+            System.out.println("Nome inválido. O arquivo não foi salvo.");
+            return;
+        }
+
+        try {
+            FileService.exportTasks(tasks, fileName);
+            System.out.println("Arquivo '" + fileName + "' salvo com sucesso!");
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar: " + e.getMessage());
+        }
+    }
+
+    private static void filterByStatus() {
+        System.out.println("=== Filtar por status ===");
+        String status = readStatus();
+        List<TaskDTO> result = manager.filterByStatus(status);
+        retrieveTasks(result);
+    }
+
+    private static void filterByPriority() {
+        System.out.println("=== Filtar por prioridade ===");
+        int priority = readPriority();
+
+        List<TaskDTO> result = manager.filterByPriority(priority);
+        retrieveTasks(result);
+    }
+
+    private static void filterByCategory() {
+        System.out.println("=== Filtar por categoria ===");
+        System.out.println("\nCategorias disponíveis: " + manager.getCategories());
+        System.out.print("Digite o nome da categoria para busca: ");
+        String category = input.nextLine().trim();
+
+        List<TaskDTO> result = manager.filterByCategory(category);
+        retrieveTasks(result);
     }
 
     private static void retrieveTasks(List<TaskDTO> tasks) {
@@ -112,6 +162,13 @@ public class Main {
             tasks.forEach(System.out::println);
             System.out.println("Total: " + tasks.size() + " tarefa(s).");
         }
+    }
+
+    private static String processCategory() {
+        System.out.println("\nCategorias disponíveis: " + manager.getCategories());
+        String inputCategory = readString("Digite o nome da categoria: ").trim();
+        manager.addCategory(inputCategory);
+        return inputCategory;
     }
 
     private static String readString(String label) {
@@ -146,55 +203,5 @@ public class Main {
     private static String readStatus() {
         System.out.println("Status (TODO, DOING, DONE): ");
         return input.nextLine().trim();
-    }
-
-    private static void filterByStatus() {
-        System.out.println("=== Filtar por status ===");
-        String status = readStatus();
-        List<TaskDTO> result = manager.filterByStatus(status);
-        retrieveTasks(result);
-    }
-
-    private static void filterByPriority() {
-        System.out.println("=== Filtar por prioridade ===");
-        int priority = readPriority();
-
-        List<TaskDTO> result = manager.filterByPriority(priority);
-        retrieveTasks(result);
-    }
-
-    private static String processCategory() {
-        System.out.println("\nCategorias disponíveis: " + manager.getCategories());
-        System.out.println("Digite o nome da categoria: ");
-        String inputCategory = input.nextLine().trim();
-        manager.addCategory(inputCategory);
-        return inputCategory;
-    }
-
-    private static void filterByCategory() {
-        System.out.println("=== Filtar por categoria ===");
-        System.out.println("\nCategorias disponíveis: " + manager.getCategories());
-        System.out.print("Digite o nome da categoria para busca: ");
-        String category = input.nextLine().trim();
-
-        List<TaskDTO> result = manager.filterByCategory(category);
-        retrieveTasks(result);
-    }
-
-    public static void saveTasks() {
-        if (manager.getTaskDTO().isEmpty()) {
-            System.out.println("Não há itens na lista para salvar.");
-            return;
-        }
-
-        System.out.println("\n=== Exportar Tarefas ===");
-        System.out.print("Digite o nome do arquivo (ex: tarefas_fevereiro): ");
-        String fileName = input.nextLine().trim();
-
-        if (fileName.isEmpty()) {
-            System.out.println("Nome inválido. O arquivo não foi salvo.");
-            return;
-        }
-        manager.exportTasksToTxt(fileName);
     }
 }
