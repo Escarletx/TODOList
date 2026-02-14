@@ -1,11 +1,16 @@
 package br.com.escarlet.todolist.view;
 
-import java.util.Scanner;
 import br.com.escarlet.todolist.controller.DataManager;
+import br.com.escarlet.todolist.model.enums.TaskStatus;
+
+import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
-    private static final DataManager manager = new DataManager();
     private static final Scanner input = new Scanner(System.in);
+    private static final DataManager manager = new DataManager();
+    private static final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     public static void main(String[] args) {
         while(true) {
@@ -22,7 +27,7 @@ public class Main {
                     default:
                         System.out.println("Opção inválida!");
                 }
-            } catch (NumberFormatException var2) {
+            } catch (NumberFormatException e) {
                 System.out.println("Digite apenas os números do menu.");
             }
         }
@@ -37,13 +42,55 @@ public class Main {
 
     public static void addTask() {
         System.out.println(" === Cadastro da Tarefa ===");
-        System.out.println("Nome da tarefa: ");
-        String name = input.nextLine();
-        System.out.println("Descrição: ");
-        String description = input.nextLine();
-        manager.addTask(name, description);
+        String name = readString("Nome: ");
+        String description = readString("Descrição: ");
+        int priority = readPriority();
+        LocalDateTime dueDate = readDateTime();
+        TaskStatus status = readStatus();
+        manager.addTask(name, description, priority, dueDate, status);
         System.out.println("\nTarefas cadastradas: ");
         manager.getTaskList().forEach(System.out::println);
         System.out.println();
+    }
+
+    private static String readString(String label) {
+        System.out.println(label);
+        return input.nextLine();
+    }
+
+    private static int readPriority() {
+        while (true) {
+            try {
+                System.out.println("Nível de prioridade de 1 a 5: ");
+                int p = Integer.parseInt(input.nextLine());
+                if (p >= 1 && p <= 5) return p;
+                System.out.println("Digite um nível de prioridade entre 1 e 5");
+            } catch (NumberFormatException e) {
+                System.out.println("Nivel de prioridade inválido!");
+            }
+        }
+    }
+
+    private static LocalDateTime readDateTime() {
+        while (true) {
+            try {
+                System.out.println("Data de término (dd/MM/yyyy HH:mm): ");
+                return LocalDateTime.parse(input.nextLine(), fmt);
+            } catch (Exception e) {
+                System.out.println("Formato inválido! Ex: 20/02/2026 14:00");
+            }
+        }
+    }
+
+    private static TaskStatus readStatus() {
+        while(true) {
+            try {
+                System.out.println("Status (TODO, DOING, DONE): ");
+                String inputStatus = input.nextLine();
+                return TaskStatus.valueOf(inputStatus.trim().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Status inválido.");
+            }
+        }
     }
 }
