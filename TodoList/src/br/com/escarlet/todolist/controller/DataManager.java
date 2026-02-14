@@ -17,4 +17,8 @@ public class DataManager {
     }
 
     public List<Task> getTaskList() { return this.taskList; }
+
+    public boolean removeTaskById(int id) {
+        return taskList.removeIf(task -> task.getId() == id);
+    }
 }

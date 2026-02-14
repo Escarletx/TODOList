@@ -2,12 +2,12 @@ package br.com.escarlet.todolist.model.entities;
 
 import br.com.escarlet.todolist.model.enums.TaskStatus;
 
-import java.util.UUID;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Task {
-    private final UUID id = UUID.randomUUID();
+    private static int counter = 1;
+    private final int id;
     private String name;
     private String description;
     private int priority;
@@ -15,6 +15,7 @@ public class Task {
     private TaskStatus status;
 
     public Task(String name, String description, int priority, LocalDateTime dueDate, TaskStatus status) {
+        this.id = counter++;
         this.name = name;
         this.description = description;
         this.priority = priority;
@@ -22,7 +23,7 @@ public class Task {
         this.status = status;
     }
 
-    public UUID getId() { return id; }
+    public int getId() { return id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getDescription() { return description; }
@@ -39,12 +40,13 @@ public class Task {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return """
            +-------------------------------------------+
+           | ID: %d
            | Tarefa: %s
            | Descrição: %s
            | Data de término: %s
            | Nível de prioridade: %s
            | Status: %s
            +-------------------------------------------+
-           """.formatted(name, description, dueDate.format(fmt), priority, status);
+           """.formatted(id, name, description, dueDate.format(fmt), priority, status);
     }
 }
