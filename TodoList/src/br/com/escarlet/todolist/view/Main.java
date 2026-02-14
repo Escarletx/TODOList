@@ -30,12 +30,16 @@ public class Main {
                         retrieveTasks(manager.getTaskDTO());
                         break;
                     case 4:
-                        filterByStatus();
+                        System.out.print("=== Cadastre uma categoria ===");
+                        processCategory();
                         break;
                     case 5:
-                        filterByPriority();
+                        filterByStatus();
                         break;
                     case 6:
+                        filterByPriority();
+                        break;
+                    case 7:
                         System.out.println("Encerrando programa");
                         return;
                     default:
@@ -52,9 +56,10 @@ public class Main {
         System.out.println("1. Adicionar Tarefa");
         System.out.println("2. Listar Tarefas");
         System.out.println("3. Remover tarefas da lista");
-        System.out.println("4. Filtar por status");
-        System.out.println("5. Filtar por prioridade");
-        System.out.println("6. Sair");
+        System.out.println("4. Cadastrar categoria de tarefa");
+        System.out.println("5. Filtar por status");
+        System.out.println("6. Filtar por prioridade");
+        System.out.println("7. Sair");
         System.out.println("Escolha uma opção: ");
     }
 
@@ -65,7 +70,9 @@ public class Main {
         int priority = readPriority();
         LocalDateTime dueDate = readDateTime();
         String status = readStatus();
-        manager.addTask(name, description, priority, dueDate, status);
+        System.out.println("== Escolha ou cadastre uma categoria ==");
+        String category = processCategory();
+        manager.addTask(name, description, priority, dueDate, status, category);
     }
 
     public static void removeTask() {
@@ -146,5 +153,13 @@ public class Main {
 
         List<TaskDTO> result = manager.filterByPriority(priority);
         retrieveTasks(result);
+    }
+
+    private static String processCategory() {
+        System.out.println("\nCategorias disponíveis: " + manager.getCategories());
+        System.out.println("Digite o nome da categoria: ");
+        String inputCategory = input.nextLine().trim();
+        manager.addCategory(inputCategory);
+        return inputCategory;
     }
 }

@@ -12,16 +12,32 @@ import java.time.format.DateTimeFormatter;
 
 public class DataManager {
     private final List<Task> taskList = new ArrayList<>();
+    private final List<String> categories = new ArrayList<>(List.of("Trabalho", "Estudos", "Pessoal"));
     private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    public void addTask(String name, String description, int priority, LocalDateTime dueDate, String statusInput) {
+    public void addCategory(String category) {
+        if (category == null) return;
+        String formmatted = category.trim();
+        if(!formmatted.isEmpty() && !categories.contains(formmatted)) {
+            categories.add(formmatted);
+            System.out.println("Categoria incluída com sucesso!");
+        } else {
+            System.out.println("Categoria invalida ou ja cadastrada.");
+        }
+    }
+
+    public List<String> getCategories() {
+        return new ArrayList<>(categories);
+    }
+
+    public void addTask(String name, String description, int priority, LocalDateTime dueDate, String statusInput, String category) {
         try {
             TaskStatus status = TaskStatus.valueOf(statusInput.toUpperCase().trim());
-            this.taskList.add(new Task(name, description, priority, dueDate, status));
+            this.taskList.add(new Task(name, description, priority, dueDate, status, category));
 
             Collections.sort(taskList);
         } catch (IllegalArgumentException e) {
-            this.taskList.add(new Task(name, description, priority, dueDate, TaskStatus.TODO));
+            this.taskList.add(new Task(name, description, priority, dueDate, TaskStatus.TODO, category));
 
             Collections.sort(taskList);
         }
@@ -66,7 +82,8 @@ public class DataManager {
                         t.getDescription(),
                         t.getPriority(),
                         t.getDueDate().format(fmt),
-                        t.getStatus().name()
+                        t.getStatus().name(),
+                        t.getCategory()
                 );
     }
 }
