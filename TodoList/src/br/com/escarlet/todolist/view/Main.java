@@ -21,7 +21,17 @@ public class Main {
                     case 1:
                         addTask();
                         break;
-                    case 2:
+                    case 2: {
+                        var tasks = manager.getTaskList();
+                        if (tasks.isEmpty()) {
+                            System.out.println("\n Nenhuma tarefa encontrada.");
+                        } else {
+                            System.out.println("\n=== Lista de tarefas ===");
+                            tasks.forEach(System.out::println);
+                        }
+                        break;
+                    }
+                    case 3:
                         System.out.println("Encerrando programa");
                         return;
                     default:
@@ -36,7 +46,8 @@ public class Main {
     public static void mainMenu() {
         System.out.println(" === TODO LIST ===");
         System.out.println("1. Adicionar Tarefa");
-        System.out.println("2. Sair");
+        System.out.println("2. Listar Tarefas");
+        System.out.println("3. Sair");
         System.out.println("Escolha uma opção: ");
     }
 
