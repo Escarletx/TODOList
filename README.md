@@ -64,6 +64,15 @@ Como este é um projeto Java puro (sem frameworks como Spring ou Maven):
 * **Uso de DTOs:** A aplicação utiliza `TaskDTO` para enviar dados para a camada de visualização. Isso evita que a `Main` manipule objetos de domínio diretamente, protegendo a lógica de negócio e facilitando a formatação de datas e textos.
 * **Persistência desacoplada (FileService):** A funcionalidade de salvar em `.txt` foi extraída do controlador principal para uma classe de serviço. Isso segue o princípio de responsabilidade única e permite que o sistema seja facilmente expandido para outros formatos (CSV, JSON) no futuro.
 * **Experiência do Usuário (UX) no Console:** Foram implementadas validações de entrada (Try-Catch) para garantir que o programa não feche inesperadamente caso o usuário digite um ID inválido ou uma data fora do padrão.
+*  **Lógica de Alarme:** O sistema utiliza a API `java.time` para calcular janelas de alerta. Se o horário atual somado à antecedência do alarme for superior ao prazo de término, o DTO sinaliza o aviso na View, garantindo que o usuário nunca perca um compromisso por falta de visibilidade.
+
+## Histórico de Atualizações
+#### [Desafio K1-T3] Alarme para as tasks
+Implementação de um mecanismo de alerta para tarefas próximas ao vencimento, focado no caso de uso do Sr. X Tudo na Chapa.
+* Funcionalidade: O usuário define uma antecedência (em minutos) no momento do cadastro.
+* Gatilho: O sistema verifica automaticamente tarefas pendentes no loop principal da aplicação.
+* Lógica: Baseada em janela de tempo dinâmica ($T_{atual} + T_{antecedência} > T_{vencimento}$).
+
 
 ---
 
