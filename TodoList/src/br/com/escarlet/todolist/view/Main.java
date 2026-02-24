@@ -17,8 +17,9 @@ public class Main {
 
     public static void main(String[] args) {
         while(true) {
+            checkAlarms();
+            mainMenu();
             try {
-                mainMenu();
                 int option = Integer.parseInt(input.nextLine());
                 switch (option) {
                     case 1:
@@ -83,7 +84,13 @@ public class Main {
         String status = readStatus();
         System.out.println("== Escolha ou cadastre uma categoria ==");
         String category = processCategory();
-        manager.addTask(name, description, priority, dueDate, status, category);
+        int alarm = 0;
+        String hasAlarm = readString("Deseja agendar um lembrete? ");
+        String alarmActive = hasAlarm.toLowerCase();
+        if(alarmActive.equals("sim")) {
+            alarm = readAlarm();
+        }
+        manager.addTask(name, description, priority, dueDate, status, category, alarm);
     }
 
     public static void removeTask() {
@@ -154,6 +161,15 @@ public class Main {
         retrieveTasks(result);
     }
 
+    private static void checkAlarms() {
+        List<TaskDTO> alarms = manager.getActiveAlarm();
+        if(!alarms.isEmpty()) {
+            System.out.println("\n=== ALERTA DE TAREFAS PRÓXIMAS ===");
+            alarms.forEach(dto -> System.out.println("-> " + dto.name() + " vence em breve!" + "\n Data de termino: " + dto.dueDate() + "\n"));
+            System.out.println("=====================================\n");
+        }
+    }
+
     private static void retrieveTasks(List<TaskDTO> tasks) {
         if(tasks.isEmpty()) {
             System.out.println("Nenhuma tarefa encontrada.");
@@ -203,5 +219,18 @@ public class Main {
     private static String readStatus() {
         System.out.println("Status (TODO, DOING, DONE): ");
         return input.nextLine().trim();
+    }
+
+    private static int readAlarm() {
+        while (true) {
+            try {
+                System.out.println("Agendar lembrete para quantos minutos?");
+                int time = Integer.parseInt(input.nextLine());
+                if (time > 0) return time;
+                System.out.println("Agendamento registrado");
+            } catch (Exception ignore) {
+                System.out.println("Agendamento inválido!");
+            }
+        }
     }
 }

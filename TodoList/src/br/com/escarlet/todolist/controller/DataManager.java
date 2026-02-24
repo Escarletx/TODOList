@@ -15,16 +15,16 @@ public class DataManager {
     private final List<String> categories = new ArrayList<>(List.of("Trabalho", "Estudos", "Pessoal"));
     private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    public void addTask(String name, String description, int priority, LocalDateTime dueDate, String statusInput, String category) {
+    public void addTask(String name, String description, int priority, LocalDateTime dueDate, String statusInput, String category, int alarm) {
         TaskStatus status;
         try {
             status = TaskStatus.valueOf(statusInput.toUpperCase().trim());
         } catch (IllegalArgumentException e) {
             status = TaskStatus.TODO;
         }
-        this.taskList.add(new Task(name, description, priority, dueDate, status, category));
+        this.taskList.add(new Task(name, description, priority, dueDate, status, category, alarm));
         Collections.sort(taskList);
-        System.out.println("Tarefa " + name + " criada com sucesso!");
+        System.out.println("Tarefa " + name + " criada com sucesso!" + " O alarme foi definido para: " + alarm + " minutos.");
     }
 
     public boolean removeTaskById(int id) {
@@ -75,5 +75,15 @@ public class DataManager {
 
     public List<String> getCategories() {
         return new ArrayList<>(categories);
+    }
+
+    public List<TaskDTO> getActiveAlarm() {
+        LocalDateTime now = LocalDateTime.now();
+        return taskList.stream()
+                .filter(t -> t.getAlarm() > 0)
+                .filter(t -> t.getStatus() != TaskStatus.DONE)
+                .filter(t -> now.plusMinutes(t.getAlarm()).isAfter(t.getDueDate()) && now.isBefore(t.getDueDate()))
+                .map(t -> TaskDTO.fromEntity(t, fmt))
+                .toList();
     }
 }

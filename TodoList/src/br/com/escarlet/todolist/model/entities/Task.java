@@ -13,8 +13,9 @@ public class Task implements Comparable<Task>{
     private final LocalDateTime dueDate;
     private final TaskStatus status;
     private final String category;
+    private final int alarm;
 
-    public Task(String name, String description, int priority, LocalDateTime dueDate, TaskStatus status, String category) {
+    public Task(String name, String description, int priority, LocalDateTime dueDate, TaskStatus status, String category, int alarm) {
         this.id = counter++;
         this.name = name;
         this.description = description;
@@ -22,6 +23,7 @@ public class Task implements Comparable<Task>{
         this.dueDate = dueDate;
         this.status = status;
         this.category = category;
+        this.alarm = alarm;
     }
 
     @Override
@@ -36,4 +38,5 @@ public class Task implements Comparable<Task>{
     public LocalDateTime getDueDate() { return dueDate; }
     public TaskStatus getStatus() { return status; }
     public String getCategory() { return category; }
+    public int getAlarm() { return alarm; }
 }

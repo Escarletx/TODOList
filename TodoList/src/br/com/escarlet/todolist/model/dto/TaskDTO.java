@@ -11,7 +11,8 @@ public record TaskDTO(
         int priority,
         String dueDate,
         String status,
-        String category)
+        String category,
+        int alarm)
 {
     public static TaskDTO fromEntity (Task t, DateTimeFormatter fmt) {
         return new TaskDTO(
@@ -21,11 +22,13 @@ public record TaskDTO(
                 t.getPriority(),
                 t.getDueDate().format(fmt),
                 t.getStatus().name(),
-                t.getCategory());
+                t.getCategory(),
+                t.getAlarm());
     }
 
     @Override
     public String toString() {
+        String hasAlarm = (alarm > 0) ? "Sim" : "Não";
         return """
            +-------------------------------------------+
            | ID: %d
@@ -35,7 +38,8 @@ public record TaskDTO(
            | Nível de prioridade: %s
            | Status: %s
            | Categoria: %s
+           | Alarme: %s
            +-------------------------------------------+
-           """.formatted(id, name, description, dueDate, priority, status, category);
+           """.formatted(id, name, description, dueDate, priority, status, category, hasAlarm);
     }
 }
