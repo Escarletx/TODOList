@@ -1,7 +1,8 @@
 package br.com.escarlet.todolist.view;
 
 import br.com.escarlet.todolist.model.dto.TaskDTO;
-import br.com.escarlet.todolist.controller.DataManager;
+import br.com.escarlet.todolist.controller.CategoryController;
+import br.com.escarlet.todolist.controller.TaskController;
 
 import java.util.List;
 import java.util.Scanner;
@@ -10,7 +11,8 @@ import java.time.format.DateTimeFormatter;
 
 public class Main {
     private static final Scanner input = new Scanner(System.in);
-    private static final DataManager manager = new DataManager();
+    private static final TaskController taskManager = new TaskController();
+    private static final CategoryController categoryManager = new CategoryController();
     private static final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     public static void main(String[] args) {
@@ -24,11 +26,11 @@ public class Main {
                         addTask();
                         break;
                     case 2:
-                        retrieveTasks(manager.getAllTasksDTO());
+                        retrieveTasks(taskManager.getAllTasksDTO());
                         break;
                     case 3:
                         removeTask();
-                        retrieveTasks(manager.getAllTasksDTO());
+                        retrieveTasks(taskManager.getAllTasksDTO());
                         break;
                     case 4:
                         System.out.print("=== Cadastre uma categoria ===");
@@ -84,11 +86,11 @@ public class Main {
         if(alarmActive.equals("sim")) {
             alarm = readAlarm();
         }
-        manager.addTask(name, description, priority, dueDate, status, category, alarm);
+        taskManager.addTask(name, description, priority, dueDate, status, category, alarm);
     }
 
     public static void removeTask() {
-        if (manager.getAllTasksDTO().isEmpty()) {
+        if (taskManager.getAllTasksDTO().isEmpty()) {
             System.out.println("Não há itens na lista para remover.");
             return;
         }
@@ -96,7 +98,7 @@ public class Main {
         System.out.println("Digite o ID da tarefa que deseja remover: ");
         try {
             int id = Integer.parseInt(input.nextLine());
-            if(manager.removeTaskById(id)) {
+            if(taskManager.removeTaskById(id)) {
                 System.out.println("Tarefa " + id + " removida!");
             } else  {
                 System.out.println("Tarefa " + id + "não encontrada.");
@@ -109,7 +111,7 @@ public class Main {
     private static void filterByStatus() {
         System.out.println("=== Filtar por status ===");
         String status = readStatus();
-        List<TaskDTO> result = manager.filterByStatus(status);
+        List<TaskDTO> result = taskManager.filterByStatus(status);
         retrieveTasks(result);
     }
 
@@ -117,22 +119,22 @@ public class Main {
         System.out.println("=== Filtar por prioridade ===");
         int priority = readPriority();
 
-        List<TaskDTO> result = manager.filterByPriority(priority);
+        List<TaskDTO> result = taskManager.filterByPriority(priority);
         retrieveTasks(result);
     }
 
     private static void filterByCategory() {
         System.out.println("=== Filtar por categoria ===");
-        System.out.println("\nCategorias disponíveis: " + manager.getCategories());
+        System.out.println("\nCategorias disponíveis: " + categoryManager.getCategories());
         System.out.print("Digite o nome da categoria para busca: ");
         String category = input.nextLine().trim();
 
-        List<TaskDTO> result = manager.filterByCategory(category);
+        List<TaskDTO> result = taskManager.filterByCategory(category);
         retrieveTasks(result);
     }
 
     private static void checkAlarms() {
-        List<TaskDTO> alarms = manager.getActiveAlarm();
+        List<TaskDTO> alarms = taskManager.getActiveAlarm();
         if(!alarms.isEmpty()) {
             System.out.println("\n=== ALERTA DE TAREFAS PRÓXIMAS ===");
             alarms.forEach(dto -> System.out.println("-> " + dto.name() + " vence em breve!" + "\n Data de termino: " + dto.dueDate() + "\n"));
@@ -151,9 +153,9 @@ public class Main {
     }
 
     private static String processCategory() {
-        System.out.println("\nCategorias disponíveis: " + manager.getCategories());
+        System.out.println("\nCategorias disponíveis: " + categoryManager.getCategories());
         String inputCategory = readString("Digite o nome da categoria: ").trim();
-        manager.addCategory(inputCategory);
+        categoryManager.addCategory(inputCategory);
         return inputCategory;
     }
 
