@@ -1,12 +1,10 @@
 package br.com.escarlet.todolist.view;
 
 import br.com.escarlet.todolist.model.dto.TaskDTO;
-import br.com.escarlet.todolist.service.FileService;
 import br.com.escarlet.todolist.controller.DataManager;
 
 import java.util.List;
 import java.util.Scanner;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
