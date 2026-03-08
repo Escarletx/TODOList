@@ -45,10 +45,7 @@ public class Main {
                     case 7:
                         filterByCategory();
                         break;
-                    case 8:
-                        saveTasks();
-                        break;
-                    case 9: {
+                    case 8: {
                         System.out.println("Encerrando programa");
                         return;
                     }
@@ -70,7 +67,6 @@ public class Main {
         System.out.println("5. Filtar por status");
         System.out.println("6. Filtar por prioridade");
         System.out.println("7. Filtar por categoria");
-        System.out.println("8. Salvar tarefas em txt");
         System.out.println("9. Sair");
         System.out.println("Escolha uma opção: ");
     }
@@ -109,30 +105,6 @@ public class Main {
             }
         } catch (NumberFormatException e) {
             System.out.println("ID inválido.");
-        }
-    }
-
-    public static void saveTasks() {
-        List<TaskDTO> tasks = manager.getAllTasksDTO();
-        if (tasks.isEmpty()) {
-            System.out.println("Não há itens na lista para salvar.");
-            return;
-        }
-
-        System.out.println("\n=== Exportar Tarefas ===");
-        System.out.print("Digite o nome do arquivo: ");
-        String fileName = input.nextLine().trim();
-
-        if (fileName.isEmpty()) {
-            System.out.println("Nome inválido. O arquivo não foi salvo.");
-            return;
-        }
-
-        try {
-            FileService.exportTasks(tasks, fileName);
-            System.out.println("Arquivo '" + fileName + "' salvo com sucesso!");
-        } catch (IOException e) {
-            System.err.println("Erro ao salvar: " + e.getMessage());
         }
     }
 
