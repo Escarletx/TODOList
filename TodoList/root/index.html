@@ -1,11 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
-    <title>Todo List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
+
 <body>
- <h1>Comming soon</h1>
+    <div class="app-container">
+        <header class="list-header">
+            <h1>Tarefas</h1>
+            <div class="filter-bar">
+                <button class="active">Todas</button>
+                <button>TODO</button>
+                <button>DOING</button>
+                <button>DONE</button>
+            </div>
+        </header>
+
+        <main id="taskContainer" class="list-content">
+        </main>
+
+        <button id="fabAdd" class="fab">
+            <span class="material-icons">add</span>
+        </button>
+    </div>
 </body>
+
 </html>

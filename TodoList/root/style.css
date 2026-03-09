@@ -1,0 +1,71 @@
+:root {
+    --bg: #fdfaf5;
+    --text: #2e2624;
+    --olive: #c47a34;
+    --terracota: #6b2d1e;
+    --todo: #ddd672;
+    --doing: #247b96;
+    --done: #0c9c54;
+    --border: #e5dfd3;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+}
+
+.app-container {
+    max-width: auto;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.list-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+    overflow-x: auto;
+}
+
+.filter-bar button {
+    background: #f0f0f0;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-bar button.active {
+    background: var(--olive);
+    color: white;
+}
+
+.fab {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--terracota);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
