@@ -1,8 +1,8 @@
 :root {
     --bg: #fdfaf5;
     --text: #2e2624;
-    --olive: #c47a34;
-    --terracota: #6b2d1e;
+    --orange: #c47a34;
+    --wine: #6b2d1e;
     --todo: #ddd672;
     --doing: #247b96;
     --done: #0c9c54;
@@ -49,7 +49,7 @@ body {
 }
 
 .filter-bar button.active {
-    background: var(--olive);
+    background: var(--orange);
     color: white;
 }
 
@@ -60,7 +60,7 @@ body {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: var(--terracota);
+    background: var(--wine);
     color: white;
     border: none;
     display: flex;
@@ -68,4 +68,36 @@ body {
     justify-content: center;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+}
+
+.row>div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }

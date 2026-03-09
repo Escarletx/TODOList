@@ -24,10 +24,56 @@
         <main id="taskContainer" class="list-content">
         </main>
 
-        <button id="fabAdd" class="fab">
+        <button id="fabAdd" class="fab" onclick="openModal()">
             <span class="material-icons">add</span>
         </button>
     </div>
+
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Nova Tarefa</h3>
+            <label>Nome da Tarefa</label>
+            <input type="text" id="mName" placeholder="Nome da tarefa">
+            <label>Descrição</label>
+            <textarea id="mDesc" placeholder="Descrição"></textarea>
+
+            <div class="row">
+                <div>
+                    <label>Prioridade (1-5)</label>
+                    <input type="number" id="mPriority" value="1" min="1" max="5">
+                </div>
+                <div>
+                    <label>Categoria</label>
+                    <select id="mCategory"></select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Término</label>
+                    <input type="datetime-local" id="mDueDate">
+                </div>
+                <div>
+                    <label>Alarme (min)</label>
+                    <input type="number" id="mAlarm" value="0" min="0">
+                </div>
+            </div>
+
+            <label>Status</label>
+            <select id="mStatus">
+                <option value="TODO">TODO</option>
+                <option value="DOING">DOING</option>
+                <option value="DONE">DONE</option>
+            </select>
+
+            <div class="modal-actions">
+                <button class="btn-save">Salvar</button>
+                <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 
 </html>
